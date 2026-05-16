@@ -1,0 +1,302 @@
+@import url("https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Goldman !important;
+}
+
+:root {
+  --backgroundColor: rgb(10, 10, 10);
+  --rockColor: #0081cc;
+  --rockColorSecondary: #c0e8ff;
+  --rockColorBackground: #000a0f;
+  --paperColor: #ffffff;
+  --paperColorSecondary: #6e6e6e;
+  --paperColorBackground: #181818;
+  --scissorsColor: #ff5858;
+  --scissorsColorSecondary: #ffbaba;
+  --scissorsColorBackground: #0f0000;
+  --buttonColor: rgb(87, 255, 233);
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 5vw;
+  background-color: var(--backgroundColor);
+  color: white;
+  height: 100vh;
+}
+
+.home h1 {
+  font-size: 1.5rem;
+  font-family: Goldman !important;
+}
+
+.home h2 {
+  color: white;
+}
+
+.title-app {
+  font-size: 1.2rem;
+  font-family: Goldman !important;
+  color: white;
+}
+
+.instagram-follow {
+  font-size: 0.7rem;
+  font-family: Goldman !important;
+  color: white;
+}
+
+.game-counters {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.rock-counter,
+.paper-counter,
+.scissors-counter {
+  padding: 1px;
+  position: relative;
+}
+
+.rock-counter {
+  color: var(--rockColor);
+  background: linear-gradient(
+    90deg,
+    var(--rockColor),
+    var(--rockColorSecondary),
+    var(--rockColor)
+  );
+}
+
+.paper-counter {
+  color: var(--paperColor);
+  background: linear-gradient(
+    90deg,
+    var(--paperColor),
+    var(--paperColorSecondary),
+    var(--paperColor)
+  );
+}
+
+.scissors-counter {
+  color: var(--scissorsColor);
+  background: linear-gradient(
+    90deg,
+    var(--scissorsColor),
+    var(--scissorsColorSecondary),
+    var(--scissorsColor)
+  );
+}
+
+.rock-counter .counter {
+  color: var(--rockColor);
+  background-color: var(--rockColorBackground);
+}
+
+.paper-counter .counter {
+  color: var(--paperColor);
+  background-color: var(--paperColorBackground);
+}
+
+.scissors-counter .counter {
+  color: var(--scissorsColor);
+  background-color: var(--scissorsColorBackground);
+}
+
+.counter-button-up,
+.counter-button-down {
+  all: unset;
+  height: 1rem;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  background-color: #ffffff09;
+}
+
+.counter-button-up {
+  top: 0;
+}
+
+.counter-button-down {
+  bottom: 0;
+}
+
+.counter {
+  position: relative;
+  background-color: var(--backgroundColor);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 0.8rem 0;
+  font-size: 0.7rem;
+  font-weight: 400;
+  font-family: Goldman !important;
+}
+
+.values-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  font-size: 0.7rem;
+}
+
+.values-container > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgb(61, 61, 61);
+  border-radius: 4px;
+  padding: 0 0.3rem;
+}
+
+.values-container > div > div:nth-child(1) {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+}
+
+.values-container div input {
+  all: unset;
+  color: white;
+  max-width: 1rem;
+  text-align: left;
+  pointer-events: none;
+}
+.values-container div label {
+  pointer-events: none;
+}
+
+.values-button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.values-button-container button {
+  all: unset;
+  height: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}
+
+.selector-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 0.6rem;
+}
+
+.selector-container div {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.clock-counter {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: Goldman !important;
+}
+
+.game-container {
+  position: relative;
+  width: 90vw;
+  height: 90vw;
+  background: linear-gradient(90deg, #00ccff, #ff0066);
+  filter: drop-shadow(0 0 2px #00ccff) drop-shadow(0 0 2px #ff0066);
+  padding: 4px;
+}
+
+.rock-arrow {
+  position: absolute;
+  color: var(--rockColor);
+}
+
+.paper-arrow {
+  position: absolute;
+  color: var(--paperColor);
+}
+.scissors-arrow {
+  position: absolute;
+  color: var(--scissorsColor);
+}
+
+.arrow-top-left {
+  transform: rotate(315deg);
+  top: 0;
+  left: 0;
+}
+
+.arrow-top-right {
+  top: 0;
+  right: 0;
+  transform: rotate(45deg);
+}
+
+.arrow-bottom-left {
+  bottom: 0;
+  left: 0;
+  transform: rotate(225deg);
+}
+
+.arrow-bottom-right {
+  bottom: 0;
+  right: 0;
+  transform: rotate(135deg);
+}
+
+.transparent-arrow {
+  opacity: 0;
+}
+
+.watermark {
+  position: absolute;
+  top: 25vh;
+  left: -8vh;
+  font-size: 1.8rem;
+  font-family: Goldman !important;
+  color: white;
+  transform: rotate(315deg);
+  opacity: 0.03;
+}
+
+.game {
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.primary-button {
+  color: black;
+  padding: 0.5rem 2rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: Goldman !important;
+  background: linear-gradient(180deg, var(--buttonColor), rgb(0, 113, 148));
+}
