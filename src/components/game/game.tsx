@@ -1,13 +1,15 @@
-import { useEffect } from "react";
 import "./game.css";
 import {
   collisionDetectionBetweenSameElements,
   collisionDetectionBetweenWinnerAndLoser,
   collisionDetectionWithWalls,
 } from "./utils/collisions";
-import type { Item } from "../../types/types";
+import type { ArrowClasses, Item } from "../../types/types";
+import { useEffect } from "react";
 
 interface Props {
+  speed: number;
+  iconRadius: number;
   rock: number;
   paper: number;
   scissor: number;
@@ -17,9 +19,26 @@ interface Props {
   setPapersNumber: React.Dispatch<React.SetStateAction<number>>;
   setRocksNumber: React.Dispatch<React.SetStateAction<number>>;
   setClock: React.Dispatch<React.SetStateAction<number>>;
+  rockArrowClass?: ArrowClasses | "arrow-hidden";
+  paperArrowClass?: ArrowClasses | "arrow-hidden";
+  scissorsArrowClass?: ArrowClasses | "arrow-hidden";
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalInfo: React.Dispatch<
+    React.SetStateAction<{
+      winner: string | null;
+      winnerSurvivalItems: number | null;
+      firstLoser: string | null;
+      firstLoserTime: number | null;
+      secondLoser: string | null;
+      totalTime: number | null;
+    }>
+  >;
+  gameReady: boolean;
 }
 
 export default function GameComponent({
+  speed,
+  iconRadius,
   rock,
   paper,
   scissor,
@@ -29,10 +48,28 @@ export default function GameComponent({
   setPapersNumber,
   setRocksNumber,
   setClock,
+  rockArrowClass,
+  paperArrowClass,
+  scissorsArrowClass,
+  setShowModal,
+  setModalInfo,
+  gameReady,
 }: Props) {
   const canvas = document.getElementById("game") as HTMLCanvasElement | null;
-  const speed = 2;
-  const iconRadius = 15;
+  let internalClockInterval;
+  let externalClockInterval;
+  let movementInterval;
+
+  let internalClock = 0;
+
+  const dataModalInfo = {
+    winner: null,
+    winnerSurvivalItems: null,
+    firstLoser: null,
+    firstLoserTime: null,
+    secondLoser: null,
+    totalTime: null,
+  };
 
   const scissorsImage = new Image();
   const scissorsSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
@@ -53,156 +90,242 @@ export default function GameComponent({
   const rockBlob = new Blob([rockSvg], { type: "image/svg+xml" });
   rockImage.src = URL.createObjectURL(rockBlob);
 
-  useEffect(() => {
-    let ctx = null;
-    if (canvas) {
-      ctx = canvas.getContext("2d");
+  let ctx = null;
+  console.log(canvas);
+  console.log(gameReady);
+  console.log(rock);
+  console.log(paper);
+  console.log(scissor);
+  if (canvas && gameReady) {
+    console.log("empieza el juego man");
 
-      const rocks: Item[] = [];
-      for (let i = 0; i < rock; i++) {
-        const xCoordinate = iconRadius * 2;
-        const yCoordinate = iconRadius * 2;
-        const angle = Math.random() * 360;
-        const radians = angle * (Math.PI / 180);
-        rocks.push({
-          x: xCoordinate,
-          y: yCoordinate,
-          movementX: Math.cos(radians) * speed,
-          movementY: Math.sin(radians) * speed,
-        });
-      }
+    ctx = canvas.getContext("2d");
 
-      const papers: Item[] = [];
-      for (let i = 0; i < paper; i++) {
-        const xCoordinate = canvas.width - iconRadius * 2;
-        const yCoordinate = iconRadius * 2;
-        const angle = Math.random() * 360;
-        const radians = angle * (Math.PI / 180);
-        papers.push({
-          x: xCoordinate,
-          y: yCoordinate,
-          movementX: Math.cos(radians) * speed,
-          movementY: Math.sin(radians) * speed,
-        });
-      }
+    const arrowClasses = {
+      "arrow-top-left": {
+        xCoordinate: iconRadius * 2,
+        yCoordinate: iconRadius * 2,
+      },
+      "arrow-top-right": {
+        xCoordinate: canvas.width - iconRadius * 2,
+        yCoordinate: iconRadius * 2,
+      },
+      "arrow-bottom-left": {
+        xCoordinate: iconRadius * 2,
+        yCoordinate: canvas.height - iconRadius * 2,
+      },
+      "arrow-bottom-right": {
+        xCoordinate: canvas.width - iconRadius * 2,
+        yCoordinate: canvas.height - iconRadius * 2,
+      },
+    } as const;
 
-      const scissors: Item[] = [];
-      for (let i = 0; i < scissor; i++) {
-        const xCoordinate = canvas.width - iconRadius * 2;
-        const yCoordinate = canvas.height - iconRadius * 2;
-        const angle = Math.random() * 360;
-        const radians = angle * (Math.PI / 180);
-        scissors.push({
-          x: xCoordinate,
-          y: yCoordinate,
-          movementX: Math.cos(radians) * speed,
-          movementY: Math.sin(radians) * speed,
-        });
-      }
-
-      const drawItems = (
-        array: Item[],
-        image: HTMLImageElement,
-        strokeColor: string,
-      ) => {
-        for (let i = 0; i < array.length; i++) {
-          const item = array[i];
-          ctx.beginPath();
-          ctx.arc(item.x, item.y, iconRadius + 2, 0, Math.PI * 2);
-          ctx.strokeStyle = strokeColor;
-          ctx.lineWidth = 2;
-          ctx.stroke();
-          ctx.closePath();
-          ctx.drawImage(
-            image,
-            item.x - iconRadius,
-            item.y - iconRadius,
-            iconRadius * 2,
-            iconRadius * 2,
-          );
-        }
-      };
-      const draw = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawItems(rocks, rockImage, "#0081cc");
-        drawItems(papers, paperImage, "#ffffff");
-        drawItems(scissors, scissorsImage, "#ff9c9c");
-      };
-
-      function startMovement() {
-        draw();
-        // ROCK COLLISIONS
-        collisionDetectionWithWalls(rocks, iconRadius, canvas);
-        collisionDetectionBetweenSameElements(rocks, iconRadius, speed);
-        collisionDetectionBetweenWinnerAndLoser(
-          rocks,
-          scissors,
-          iconRadius,
-          speed,
-          replace,
-          eliminate,
-          setRocksNumber,
-          setScissorsNumber,
-        );
-        // PAPER COLLISIONS
-        collisionDetectionWithWalls(papers, iconRadius, canvas);
-        collisionDetectionBetweenSameElements(papers, iconRadius, speed);
-        collisionDetectionBetweenWinnerAndLoser(
-          papers,
-          rocks,
-          iconRadius,
-          speed,
-          replace,
-          eliminate,
-          setPapersNumber,
-          setRocksNumber,
-        );
-        // SCISSORS COLLISIONS
-        collisionDetectionWithWalls(scissors, iconRadius, canvas);
-        collisionDetectionBetweenSameElements(scissors, iconRadius, speed);
-        collisionDetectionBetweenWinnerAndLoser(
-          scissors,
-          papers,
-          iconRadius,
-          speed,
-          replace,
-          eliminate,
-          setScissorsNumber,
-          setPapersNumber,
-        );
-
-        if (x + dx > canvas.width - iconRadius || x + dx < iconRadius) {
-          dx = -dx;
-        }
-        if (y + dy < iconRadius) {
-          dy = -dy;
-        } else if (y + dy > canvas.height - iconRadius) {
-          if (x > paddleX && x < paddleX + paddleWidth) {
-            if ((y -= paddleHeight)) {
-              dy = -dy;
-            }
-          } else {
-            alert("GAME OVER");
-            document.location.reload();
-            clearInterval(interval); // Needed for Chrome to end game
-          }
-        }
-      }
-
-      function startGame() {
-        setInterval(startMovement, 10);
-        setInterval(() => {
-          setClock((prev) => (prev !== undefined ? prev + 1 : 0));
-        }, 1000);
-      }
-
-      const startButton = document.getElementById("startButton");
-      startButton.addEventListener("click", () => {
-        startGame();
-        startButton.disabled = true;
+    const rocks: Item[] = [];
+    for (let i = 0; i < rock; i++) {
+      const xCoordinate =
+        rockArrowClass === "arrow-hidden"
+          ? null
+          : arrowClasses[rockArrowClass].xCoordinate;
+      const yCoordinate =
+        rockArrowClass === "arrow-hidden"
+          ? null
+          : arrowClasses[rockArrowClass].yCoordinate;
+      const angle = Math.random() * 360;
+      const radians = angle * (Math.PI / 180);
+      rocks.push({
+        x: xCoordinate,
+        y: yCoordinate,
+        movementX: Math.cos(radians) * speed,
+        movementY: Math.sin(radians) * speed,
       });
     }
-  }, [canvas]);
+    console.log(rocks);
+
+    const papers: Item[] = [];
+    for (let i = 0; i < paper; i++) {
+      const xCoordinate =
+        paperArrowClass === "arrow-hidden"
+          ? null
+          : arrowClasses[paperArrowClass].xCoordinate;
+      const yCoordinate =
+        paperArrowClass === "arrow-hidden"
+          ? null
+          : arrowClasses[paperArrowClass].yCoordinate;
+      const angle = Math.random() * 360;
+      const radians = angle * (Math.PI / 180);
+      papers.push({
+        x: xCoordinate,
+        y: yCoordinate,
+        movementX: Math.cos(radians) * speed,
+        movementY: Math.sin(radians) * speed,
+      });
+    }
+
+    const scissors: Item[] = [];
+    for (let i = 0; i < scissor; i++) {
+      const xCoordinate =
+        scissorsArrowClass === "arrow-hidden"
+          ? null
+          : arrowClasses[scissorsArrowClass].xCoordinate;
+      const yCoordinate =
+        scissorsArrowClass === "arrow-hidden"
+          ? null
+          : arrowClasses[scissorsArrowClass].yCoordinate;
+      const angle = Math.random() * 360;
+      const radians = angle * (Math.PI / 180);
+      scissors.push({
+        x: xCoordinate,
+        y: yCoordinate,
+        movementX: Math.cos(radians) * speed,
+        movementY: Math.sin(radians) * speed,
+      });
+    }
+
+    const drawItems = (
+      array: Item[],
+      image: HTMLImageElement,
+      strokeColor: string,
+    ) => {
+      for (let i = 0; i < array.length; i++) {
+        const item = array[i];
+        ctx.beginPath();
+        ctx.arc(item.x, item.y, iconRadius + 2, 0, Math.PI * 2);
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
+        ctx.drawImage(
+          image,
+          item.x - iconRadius,
+          item.y - iconRadius,
+          iconRadius * 2,
+          iconRadius * 2,
+        );
+      }
+    };
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawItems(rocks, rockImage, "#0081cc");
+      drawItems(papers, paperImage, "#ffffff");
+      drawItems(scissors, scissorsImage, "#ff9c9c");
+    };
+
+    function startMovement() {
+      draw();
+      // ROCK COLLISIONS
+      collisionDetectionWithWalls(rocks, iconRadius, canvas);
+      collisionDetectionBetweenSameElements(rocks, iconRadius, speed);
+      collisionDetectionBetweenWinnerAndLoser(
+        rocks,
+        scissors,
+        iconRadius,
+        speed,
+        replace,
+        eliminate,
+        setRocksNumber,
+        setScissorsNumber,
+      );
+      // PAPER COLLISIONS
+      collisionDetectionWithWalls(papers, iconRadius, canvas);
+      collisionDetectionBetweenSameElements(papers, iconRadius, speed);
+      collisionDetectionBetweenWinnerAndLoser(
+        papers,
+        rocks,
+        iconRadius,
+        speed,
+        replace,
+        eliminate,
+        setPapersNumber,
+        setRocksNumber,
+      );
+      // SCISSORS COLLISIONS
+      collisionDetectionWithWalls(scissors, iconRadius, canvas);
+      collisionDetectionBetweenSameElements(scissors, iconRadius, speed);
+      collisionDetectionBetweenWinnerAndLoser(
+        scissors,
+        papers,
+        iconRadius,
+        speed,
+        replace,
+        eliminate,
+        setScissorsNumber,
+        setPapersNumber,
+      );
+
+      if (
+        (rocks.length === 0 || papers.length === 0 || scissors.length === 0) &&
+        dataModalInfo.firstLoser === null
+      ) {
+        dataModalInfo.firstLoser =
+          rocks.length === 0
+            ? "ROCK"
+            : papers.length === 0
+              ? "PAPER"
+              : "SCISSORS";
+        dataModalInfo.firstLoserTime = internalClock;
+      }
+
+      if (
+        ((rocks.length === 0 && papers.length === 0) ||
+          (rocks.length === 0 && scissors.length === 0) ||
+          (papers.length === 0 && scissors.length === 0)) &&
+        dataModalInfo.winner === null
+      ) {
+        dataModalInfo.winner =
+          rocks.length > 0 ? "ROCK" : papers.length > 0 ? "PAPER" : "SCISSORS";
+        dataModalInfo.winnerSurvivalItems =
+          rocks.length + papers.length + scissors.length;
+        dataModalInfo.secondLoser =
+          rocks.length === 0
+            ? papers.length === 0
+              ? "PAPER"
+              : "ROCK"
+            : papers.length === 0
+              ? "SCISSORS"
+              : "PAPER";
+        dataModalInfo.totalTime = internalClock;
+
+        setModalInfo(dataModalInfo);
+        clearInterval(movementInterval);
+        clearInterval(internalClockInterval);
+        clearInterval(externalClockInterval);
+        setShowModal(true);
+      }
+
+      // if (x + dx > canvas.width - iconRadius || x + dx < iconRadius) {
+      //   dx = -dx;
+      // }
+      // if (y + dy < iconRadius) {
+      //   dy = -dy;
+      // } else if (y + dy > canvas.height - iconRadius) {
+      //   if (x > paddleX && x < paddleX + paddleWidth) {
+      //     if ((y -= paddleHeight)) {
+      //       dy = -dy;
+      //     }
+      //   } else {
+      //     alert("GAME OVER");
+      //     document.location.reload();
+      //     clearInterval(interval); // Needed for Chrome to end game
+      //   }
+      // }
+    }
+
+    function startGame() {
+      movementInterval = setInterval(startMovement, 10);
+      internalClockInterval = setInterval(() => {
+        internalClock += 1;
+      }, 1000);
+      externalClockInterval = setInterval(() => {
+        setClock(internalClock);
+      }, 1000);
+    }
+
+    const startButton = document.getElementById("startButton");
+    startButton.addEventListener("click", () => {
+      startGame();
+      startButton.disabled = true;
+    });
+  }
 
   return <canvas id="game" className="game" width="500" height="500"></canvas>;
 }

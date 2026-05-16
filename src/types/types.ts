@@ -1,6 +1,6 @@
 export interface Item {
-  x: number;
-  y: number;
+  x: number | null;
+  y: number | null;
   movementX: number;
   movementY: number;
 }

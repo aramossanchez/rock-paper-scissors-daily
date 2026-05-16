@@ -4,6 +4,11 @@ body {
   margin: 0;
   padding: 0;
   font-family: Goldman !important;
+  color: white;
+}
+
+p {
+  margin: 0;
 }
 
 :root {
@@ -27,29 +32,15 @@ body {
   justify-content: space-around;
   padding: 0 5vw;
   background-color: var(--backgroundColor);
-  color: white;
   height: 100vh;
-}
-
-.home h1 {
-  font-size: 1.5rem;
-  font-family: Goldman !important;
-}
-
-.home h2 {
-  color: white;
 }
 
 .title-app {
   font-size: 1.2rem;
-  font-family: Goldman !important;
-  color: white;
 }
 
 .instagram-follow {
   font-size: 0.7rem;
-  font-family: Goldman !important;
-  color: white;
 }
 
 .game-counters {
@@ -141,10 +132,9 @@ body {
   justify-content: center;
   align-items: center;
   gap: 4px;
-  padding: 0.8rem 0;
+  padding: 1.2rem 0.2rem;
   font-size: 0.7rem;
   font-weight: 400;
-  font-family: Goldman !important;
 }
 
 .values-container {
@@ -207,6 +197,7 @@ body {
 .selector-container div {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 4px;
 }
 
@@ -263,8 +254,12 @@ body {
   transform: rotate(135deg);
 }
 
-.transparent-arrow {
+.arrow-hidden {
   opacity: 0;
+}
+
+.arrow-invisible {
+  opacity: 0 !important;
 }
 
 .watermark {
