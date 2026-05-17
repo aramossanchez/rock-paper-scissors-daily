@@ -5,6 +5,7 @@ import {
   collisionDetectionWithWalls,
 } from "./utils/collisions";
 import type { ArrowClasses, Item, ModalInfo } from "../../types/types";
+import { playEndgameSound } from "../../utils/executeSounds";
 
 interface Props {
   speed: number;
@@ -258,27 +259,13 @@ export default function GameComponent({
         clearInterval(internalClockInterval);
         clearInterval(externalClockInterval);
         setShowModal(true);
+        playEndgameSound();
       }
-
-      // if (x + dx > canvas.width - iconRadius || x + dx < iconRadius) {
-      //   dx = -dx;
-      // }
-      // if (y + dy < iconRadius) {
-      //   dy = -dy;
-      // } else if (y + dy > canvas.height - iconRadius) {
-      //   if (x > paddleX && x < paddleX + paddleWidth) {
-      //     if ((y -= paddleHeight)) {
-      //       dy = -dy;
-      //     }
-      //   } else {
-      //     alert("GAME OVER");
-      //     document.location.reload();
-      //     clearInterval(interval); // Needed for Chrome to end game
-      //   }
-      // }
     }
 
     function startGame() {
+      // ejecutar el sonido que tengo en assets cuando se presiona el boton de start
+
       movementInterval = setInterval(startMovement, 10);
       internalClockInterval = setInterval(() => {
         internalClock += 1;

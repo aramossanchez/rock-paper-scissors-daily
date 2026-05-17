@@ -17,7 +17,9 @@ export default function EndGameModalComponent({
           Surviving items: {modalInfo.winnerSurvivalItems}{" "}
           {modalInfo.winner?.toLowerCase()}
           {""}
-          {modalInfo.winner !== "SCISSORS" && "s"}
+          {modalInfo.winner !== "SCISSORS" &&
+            (modalInfo.winnerSurvivalItems as number) > 1 &&
+            "s"}
         </p>
       </div>
       <div>

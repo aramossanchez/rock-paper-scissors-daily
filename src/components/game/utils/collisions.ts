@@ -1,4 +1,5 @@
 import type { Item } from "../../../types/types";
+import { playHitSound } from "../../../utils/executeSounds";
 
 export const collisionDetectionBetweenSameElements = (
   array: Item[],
@@ -75,11 +76,13 @@ export const collisionDetectionBetweenWinnerAndLoser = (
           loserArray.splice(j, 1);
           winnerSetter((prev) => prev + 1);
           loserSetter((prev) => prev - 1);
+          playHitSound();
         } else if (eliminate) {
           loserArray.splice(j, 1);
           loserSetter((prev) => prev - 1);
           winnerArray[i].movementX = loserItem.movementX * 1.1;
           winnerArray[i].movementY = loserItem.movementY * 1.1;
+          playHitSound();
         }
         j--;
       }

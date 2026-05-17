@@ -13,6 +13,7 @@ import ScissorsIcon from "../../icons/scissors";
 import EndGameModalComponent from "../../components/modal/endGameModal/endGameModal";
 import TypesGuideLoaderComponent from "../../components/loaders/typesGuideLoader/typesGuideLoader";
 import CountLoaderComponent from "../../components/loaders/typesGuideLoader/countLoader/countLoader";
+import { playCountdownSound } from "../../utils/executeSounds";
 
 export default function HomeContainer() {
   const [speed, setSpeed] = useState(2);
@@ -20,7 +21,7 @@ export default function HomeContainer() {
   const [rocksNumber, setRocksNumber] = useState(10);
   const [papersNumber, setPapersNumber] = useState(10);
   const [scissorsNumber, setScissorsNumber] = useState(10);
-  const [eliminate, setEliminate] = useState(false);
+  const [eliminate, setEliminate] = useState(true);
   const [replace, setReplace] = useState(false);
   const [externalClock, setExternalClock] = useState<number>(0);
   const [rockArrowClass, setRockArrowClass] = useState<ArrowClasses | null>(
@@ -74,7 +75,7 @@ export default function HomeContainer() {
       <p className="title-app">ROCK - PAPER - SCISSORS</p>
       {/* TEXTO DESCRIPTIVO DE LA APP (ES UN CALL TO ACTION) */}
       <p className="instagram-follow">
-        Follow us on Instagram: <strong>@rock_paper_scissors_daily</strong>
+        Follow us on TikTok: <strong>@rock_paper_scissors.day</strong>
       </p>
       {/* SE MODIFICAN VELOCIDAD Y TAMAÑO DE LOS ITEMS */}
       <div className="values-container">
@@ -208,7 +209,7 @@ export default function HomeContainer() {
       </div>
       <div className="game-container">
         {/* MARCA DE AGUA POR SI ACASO ME INTENTAN GRABAR LA PANTALLA DE LOS REELS (SI, FIJO QUE PASA) */}
-        <p className="watermark">@rock_paper_scissors_daily</p>
+        <p className="watermark">@rock_paper_scissors.day</p>
         {/* FLECHAS QUE INDICAN DESDE DONDE EMPIEZA CADA TIPO DE ITEM */}
         <div
           className={`rock-arrow ${!rockArrowClass ? "arrow-hidden" : rockArrowClass} ${needToHideArrows ? "arrow-invisible" : ""}`}
@@ -254,7 +255,10 @@ export default function HomeContainer() {
       <div className="buttons-container">
         <button
           className="primary-button"
-          onClick={() => selectItemsStartingPoint()}
+          onClick={() => {
+            selectItemsStartingPoint();
+            playCountdownSound();
+          }}
         >
           PREPARE
         </button>

@@ -23,6 +23,7 @@ p {
   --scissorsColorSecondary: #ffbaba;
   --scissorsColorBackground: #0f0000;
   --buttonColor: rgb(87, 255, 233);
+  --borderColor: rgb(61, 61, 61);
 }
 
 .home {
@@ -159,7 +160,7 @@ p {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid rgb(61, 61, 61);
+  border: 1px solid var(--borderColor);
   border-radius: 4px;
   padding: 0 0.3rem;
 }
@@ -209,6 +210,33 @@ p {
   flex-direction: row;
   align-items: center;
   gap: 4px;
+}
+
+.selector-container input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  /* creating a custom design */
+  width: 15px;
+  height: 15px;
+  border-radius: 5px;
+  border: 2px solid var(--borderColor);
+  outline: none;
+  cursor: pointer;
+}
+
+.selector-container input[type="checkbox"]:checked {
+  background-color: var(--borderColor);
+  position: relative;
+}
+
+.selector-container input[type="checkbox"]:checked::before {
+  content: "✓";
+  font-size: 15px;
+  font-weight: bold;
+  color: white;
+  position: absolute;
+  left: 1px;
+  top: -6px;
 }
 
 .clock-counter {
@@ -307,6 +335,10 @@ p {
   font-family: Goldman !important;
   background: linear-gradient(180deg, var(--buttonColor), rgb(0, 113, 148));
   z-index: 2;
+}
+
+.primary-button:active {
+  transform: scale(0.9);
 }
 
 @keyframes growAndShrinkTopLeft {
