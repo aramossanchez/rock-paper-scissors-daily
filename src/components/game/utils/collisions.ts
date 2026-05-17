@@ -69,8 +69,8 @@ export const collisionDetectionBetweenWinnerAndLoser = (
           winnerArray.push({
             x: loserItem.x,
             y: loserItem.y,
-            movementX: -winnerItem.movementX * 1.1,
-            movementY: -winnerItem.movementY * 1.1,
+            movementX: -loserItem.movementX,
+            movementY: -loserItem.movementY,
           });
           loserArray.splice(j, 1);
           winnerSetter((prev) => prev + 1);
@@ -78,8 +78,8 @@ export const collisionDetectionBetweenWinnerAndLoser = (
         } else if (eliminate) {
           loserArray.splice(j, 1);
           loserSetter((prev) => prev - 1);
-          winnerArray[i].movementX = -winnerItem.movementX * 1.1;
-          winnerArray[i].movementY = -winnerItem.movementY * 1.1;
+          winnerArray[i].movementX = loserItem.movementX * 1.1;
+          winnerArray[i].movementY = loserItem.movementY * 1.1;
         }
         j--;
       }

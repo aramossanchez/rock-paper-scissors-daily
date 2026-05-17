@@ -1,0 +1,86 @@
+.types-guide-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  width: 50vw;
+  height: 50vw;
+  animation: rotate 10s linear infinite;
+  border: 4px solid white;
+  border-radius: 100%;
+}
+
+.types-guide-loader-rock-icon {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: rotate-inverse 10s linear infinite;
+  background-color: black;
+  border-radius: 100%;
+  border: 2px solid white;
+}
+
+.types-guide-loader-arrow-one-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(60deg) translateY(-25vw) rotate(90deg);
+}
+
+.types-guide-loader-scissors-icon {
+  position: absolute;
+  top: 75%;
+  left: 93.3%;
+  transform: translate(-50%, -50%);
+  animation: rotate-inverse 10s linear infinite;
+  background-color: black;
+  border-radius: 100%;
+  border: 2px solid white;
+}
+
+.types-guide-loader-arrow-two-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(180deg) translateY(-25vw)
+    rotate(90deg);
+}
+
+.types-guide-loader-paper-icon {
+  position: absolute;
+  top: 75%;
+  left: 6.7%;
+  transform: translate(-50%, -50%);
+  animation: rotate-inverse 10s linear infinite;
+  background-color: black;
+  border-radius: 100%;
+  border: 2px solid white;
+}
+
+.types-guide-loader-arrow-three-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(300deg) translateY(-25vw)
+    rotate(90deg);
+}
+
+@keyframes rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes rotate-inverse {
+  from {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+}

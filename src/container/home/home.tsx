@@ -11,13 +11,15 @@ import RockIcon from "../../icons/rock";
 import PaperIcon from "../../icons/paper";
 import ScissorsIcon from "../../icons/scissors";
 import EndGameModalComponent from "../../components/modal/endGameModal/endGameModal";
+import TypesGuideLoaderComponent from "../../components/loaders/typesGuideLoader/typesGuideLoader";
+import CountLoaderComponent from "../../components/loaders/typesGuideLoader/countLoader/countLoader";
 
 export default function HomeContainer() {
   const [speed, setSpeed] = useState(2);
   const [radius, setRadius] = useState(15);
-  const [rocksNumber, setRocksNumber] = useState(1);
-  const [papersNumber, setPapersNumber] = useState(1);
-  const [scissorsNumber, setScissorsNumber] = useState(1);
+  const [rocksNumber, setRocksNumber] = useState(10);
+  const [papersNumber, setPapersNumber] = useState(10);
+  const [scissorsNumber, setScissorsNumber] = useState(10);
   const [eliminate, setEliminate] = useState(false);
   const [replace, setReplace] = useState(false);
   const [externalClock, setExternalClock] = useState<number>(0);
@@ -223,6 +225,10 @@ export default function HomeContainer() {
         >
           <ArrowDownIcon size={30} />
         </div>
+        {/* LOADERS (GUÍA DE TIPOS Y CUENTA ATRÁS) */}
+        {!gameReady && <TypesGuideLoaderComponent />}
+        {gameReady && <CountLoaderComponent />}
+
         {/* MUESTRA EL CONTENIDO DEL JUEGO */}
         <GameComponent
           speed={speed}

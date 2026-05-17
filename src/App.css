@@ -30,9 +30,9 @@ p {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  padding: 0 5vw;
   background-color: var(--backgroundColor);
   height: 100vh;
+  overflow: hidden;
 }
 
 .title-app {
@@ -47,7 +47,7 @@ p {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
-  width: 100%;
+  width: 90%;
 }
 
 .rock-counter,
@@ -124,6 +124,7 @@ p {
   transform: translateX(-50%);
   width: 100%;
   background-color: #ffffff09;
+  z-index: 2;
 }
 
 .counter-button-up {
@@ -222,7 +223,7 @@ p {
   height: 90vw;
   background: linear-gradient(90deg, #00ccff, #ff0066);
   filter: drop-shadow(0 0 2px #00ccff) drop-shadow(0 0 2px #ff0066);
-  padding: 4px;
+  padding: 3px;
 }
 
 .rock-arrow {
@@ -240,27 +241,27 @@ p {
 }
 
 .arrow-top-left {
-  transform: rotate(315deg);
   top: 0;
   left: 0;
+  animation: growAndShrinkTopLeft 1s ease-in-out infinite;
 }
 
 .arrow-top-right {
   top: 0;
   right: 0;
-  transform: rotate(45deg);
+  animation: growAndShrinkTopRight 1s ease-in-out infinite;
 }
 
 .arrow-bottom-left {
   bottom: 0;
   left: 0;
-  transform: rotate(225deg);
+  animation: growAndShrinkBottomLeft 1s ease-in-out infinite;
 }
 
 .arrow-bottom-right {
   bottom: 0;
   right: 0;
-  transform: rotate(135deg);
+  animation: growAndShrinkBottomRight 1s ease-in-out infinite;
 }
 
 .arrow-hidden {
@@ -273,12 +274,14 @@ p {
 
 .watermark {
   position: absolute;
-  top: 25vh;
-  left: -8vh;
+  width: 150%;
+  text-align: center;
+  top: -5%;
+  left: 32%;
   font-size: 1.8rem;
   font-family: Goldman !important;
   color: white;
-  transform: rotate(315deg);
+  transform: rotate(315deg) translate(-50%, -50%);
   opacity: 0.03;
 }
 
@@ -304,4 +307,52 @@ p {
   font-family: Goldman !important;
   background: linear-gradient(180deg, var(--buttonColor), rgb(0, 113, 148));
   z-index: 2;
+}
+
+@keyframes growAndShrinkTopLeft {
+  0% {
+    transform: scale(1) rotate(315deg);
+  }
+  50% {
+    transform: scale(2) rotate(315deg);
+  }
+  100% {
+    transform: scale(1) rotate(315deg);
+  }
+}
+
+@keyframes growAndShrinkTopRight {
+  0% {
+    transform: scale(1) rotate(45deg);
+  }
+  50% {
+    transform: scale(2) rotate(45deg);
+  }
+  100% {
+    transform: scale(1) rotate(45deg);
+  }
+}
+
+@keyframes growAndShrinkBottomLeft {
+  0% {
+    transform: scale(1) rotate(225deg);
+  }
+  50% {
+    transform: scale(2) rotate(225deg);
+  }
+  100% {
+    transform: scale(1) rotate(225deg);
+  }
+}
+
+@keyframes growAndShrinkBottomRight {
+  0% {
+    transform: scale(1) rotate(135deg);
+  }
+  50% {
+    transform: scale(2) rotate(135deg);
+  }
+  100% {
+    transform: scale(1) rotate(135deg);
+  }
 }
