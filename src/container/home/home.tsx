@@ -4,30 +4,33 @@ import "./home.css";
 import UpIcon from "../../icons/up";
 import DownIcon from "../../icons/down";
 import ArrowDownIcon from "../../icons/arrow-down";
-import type { ArrowClasses } from "../../types/types";
+import type { ArrowClasses, ModalInfo } from "../../types/types";
 import ModalComponent from "../../components/modal/modal";
 import { ARROW_CLASSES } from "../../constants/constants";
+import RockIcon from "../../icons/rock";
+import PaperIcon from "../../icons/paper";
+import ScissorsIcon from "../../icons/scissors";
+import EndGameModalComponent from "../../components/modal/endGameModal/endGameModal";
 
 export default function HomeContainer() {
   const [speed, setSpeed] = useState(2);
   const [radius, setRadius] = useState(15);
-  const [rocksNumber, setRocksNumber] = useState(10);
-  const [papersNumber, setPapersNumber] = useState(10);
-  const [scissorsNumber, setScissorsNumber] = useState(10);
-  const [eliminate, setEliminate] = useState(true);
+  const [rocksNumber, setRocksNumber] = useState(1);
+  const [papersNumber, setPapersNumber] = useState(1);
+  const [scissorsNumber, setScissorsNumber] = useState(1);
+  const [eliminate, setEliminate] = useState(false);
   const [replace, setReplace] = useState(false);
   const [externalClock, setExternalClock] = useState<number>(0);
-  const [rockArrowClass, setRockArrowClass] = useState<
-    ArrowClasses | "arrow-hidden"
-  >("arrow-hidden");
-  const [paperArrowClass, setPaperArrowClass] = useState<
-    ArrowClasses | "arrow-hidden"
-  >("arrow-hidden");
-  const [scissorsArrowClass, setScissorsArrowClass] = useState<
-    ArrowClasses | "arrow-hidden"
-  >("arrow-hidden");
+  const [rockArrowClass, setRockArrowClass] = useState<ArrowClasses | null>(
+    null,
+  );
+  const [paperArrowClass, setPaperArrowClass] = useState<ArrowClasses | null>(
+    null,
+  );
+  const [scissorsArrowClass, setScissorsArrowClass] =
+    useState<ArrowClasses | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [modalInfo, setModalInfo] = useState({
+  const [modalInfo, setModalInfo] = useState<ModalInfo>({
     winner: null,
     winnerSurvivalItems: null,
     firstLoser: null,
@@ -62,30 +65,27 @@ export default function HomeContainer() {
     <main className="home">
       {showModal && (
         <ModalComponent>
-          <p>RESUME OF THE GAME</p>
-          <div>
-            <p>WINNER: {modalInfo.winner}</p>
-            <p>Survival items: {modalInfo.winnerSurvivalItems}</p>
-          </div>
-          <div>
-            <p>First looser: {modalInfo.firstLoser}</p>
-            <p>Time to lose: {modalInfo.firstLoserTime}</p>
-          </div>
-          <div>
-            <p>Second looser: {modalInfo.secondLoser}</p>
-          </div>
-          <p>Total time: {modalInfo.totalTime}</p>
+          <EndGameModalComponent modalInfo={modalInfo} />
         </ModalComponent>
       )}
+      {/* TITULO DE LA APP */}
       <p className="title-app">ROCK - PAPER - SCISSORS</p>
+      {/* TEXTO DESCRIPTIVO DE LA APP (ES UN CALL TO ACTION) */}
       <p className="instagram-follow">
-        Follow in Instagram in <strong>@rock_paper_scissors_daily</strong>
+        Follow us on Instagram: <strong>@rock_paper_scissors_daily</strong>
       </p>
+      {/* SE MODIFICAN VELOCIDAD Y TAMAÑO DE LOS ITEMS */}
       <div className="values-container">
         <div>
           <div>
             <label htmlFor="speed">SPEED:</label>
-            <input type="number" name="speed" id="speed" value={speed} />
+            <input
+              type="number"
+              name="speed"
+              id="speed"
+              value={speed}
+              readOnly
+            />
           </div>
           <div className="values-button-container">
             <button onClick={() => setSpeed(speed + 1)}>
@@ -99,18 +99,25 @@ export default function HomeContainer() {
         <div>
           <div>
             <label htmlFor="radius">SIZE:</label>
-            <input type="number" name="radius" id="radius" value={radius * 2} />
+            <input
+              type="number"
+              name="radius"
+              id="radius"
+              value={radius * 2}
+              readOnly
+            />
           </div>
           <div className="values-button-container">
-            <button onClick={() => setRadius(radius + 1)}>
+            <button onClick={() => setRadius(radius + 0.5)}>
               <UpIcon size={15} />
             </button>
-            <button onClick={() => setRadius(radius - 1)}>
+            <button onClick={() => setRadius(radius - 0.5)}>
               <DownIcon size={15} />
             </button>
           </div>
         </div>
       </div>
+      {/* SE MODIFICA SI LOS ITEMS GANADORES ELIMINAN O REEMPLAZAN A LOS PERDEDORES */}
       <div className="selector-container">
         <div>
           <input
@@ -118,9 +125,9 @@ export default function HomeContainer() {
             name=""
             id="eliminate"
             onClick={() => setEliminate(!eliminate)}
-            checked={eliminate}
+            defaultChecked={eliminate}
           />
-          <label htmlFor="eliminate">PIECES DELETE ANOTHER PIECES</label>
+          <label htmlFor="eliminate">PIECES REMOVE OTHER PIECES</label>
         </div>
         <div>
           <input
@@ -128,13 +135,15 @@ export default function HomeContainer() {
             name=""
             id="replace"
             onClick={() => setReplace(!replace)}
-            checked={replace}
+            defaultChecked={replace}
           />
-          <label htmlFor="replace">PIECES REPLACE ANOTHER PIECES</label>
+          <label htmlFor="replace">PIECES REPLACE OTHER PIECES</label>
         </div>
       </div>
+      {/* SE MUESTRAN LOS ITEMS DE CADA TIPO, Y DA LA POSIBILIDAD DE MODIFICARLOS */}
       <div className="game-counters">
         <div className="rock-counter">
+          <RockIcon size={50} className="svg-icon" />
           <div className="counter">
             <p>ROCK:</p>
             <p>{rocksNumber}</p>
@@ -153,6 +162,7 @@ export default function HomeContainer() {
           </button>
         </div>
         <div className="paper-counter">
+          <PaperIcon size={50} className="svg-icon" />
           <div className="counter">
             <p>PAPER:</p>
             <p>{papersNumber}</p>
@@ -171,6 +181,7 @@ export default function HomeContainer() {
           </button>
         </div>
         <div className="scissors-counter">
+          <ScissorsIcon size={50} className="svg-icon" />
           <div className="counter">
             <p>SCISSORS:</p>
             <p>{scissorsNumber}</p>
@@ -189,27 +200,30 @@ export default function HomeContainer() {
           </button>
         </div>
       </div>
-
+      {/* EL CONTADOR DEL TIEMPO DE JUEGO */}
       <div className="clock-counter">
         {externalClock.toString().padStart(2, "0")}
       </div>
       <div className="game-container">
+        {/* MARCA DE AGUA POR SI ACASO ME INTENTAN GRABAR LA PANTALLA DE LOS REELS (SI, FIJO QUE PASA) */}
         <p className="watermark">@rock_paper_scissors_daily</p>
+        {/* FLECHAS QUE INDICAN DESDE DONDE EMPIEZA CADA TIPO DE ITEM */}
         <div
-          className={`rock-arrow ${rockArrowClass === "arrow-hidden" ? "arrow-hidden" : rockArrowClass} ${needToHideArrows ? "arrow-invisible" : ""}`}
+          className={`rock-arrow ${!rockArrowClass ? "arrow-hidden" : rockArrowClass} ${needToHideArrows ? "arrow-invisible" : ""}`}
         >
           <ArrowDownIcon size={30} />
         </div>
         <div
-          className={`paper-arrow ${paperArrowClass === "arrow-hidden" ? "arrow-hidden" : paperArrowClass} ${needToHideArrows ? "arrow-invisible" : ""}`}
+          className={`paper-arrow ${!paperArrowClass ? "arrow-hidden" : paperArrowClass} ${needToHideArrows ? "arrow-invisible" : ""}`}
         >
           <ArrowDownIcon size={30} />
         </div>
         <div
-          className={`scissors-arrow ${scissorsArrowClass === "arrow-hidden" ? "arrow-hidden" : scissorsArrowClass} ${needToHideArrows ? "arrow-invisible" : ""}`}
+          className={`scissors-arrow ${!scissorsArrowClass ? "arrow-hidden" : scissorsArrowClass} ${needToHideArrows ? "arrow-invisible" : ""}`}
         >
           <ArrowDownIcon size={30} />
         </div>
+        {/* MUESTRA EL CONTENIDO DEL JUEGO */}
         <GameComponent
           speed={speed}
           iconRadius={radius}
@@ -228,9 +242,9 @@ export default function HomeContainer() {
           setShowModal={setShowModal}
           setModalInfo={setModalInfo}
           gameReady={gameReady}
-          setGameReady={setGameReady}
         />
       </div>
+      {/* BOTONES DE PREPARAR Y DE EMPEZAR EL JUEGO */}
       <div className="buttons-container">
         <button
           className="primary-button"

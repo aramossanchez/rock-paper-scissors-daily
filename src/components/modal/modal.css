@@ -21,6 +21,9 @@
   justify-content: space-around;
   align-items: center;
   padding-bottom: 1rem;
+  animation: fadeIn 0.3s ease;
+  border-radius: 20px;
+  border: 2px solid rgb(255, 255, 255);
 }
 
 .modal-portal > div > div {
@@ -30,4 +33,21 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
+}
+
+.modal-portal > div > div > div {
+  z-index: 2;
+}
+
+.modal-portal p {
+  z-index: 2;
+}
+
+@keyframes fadeIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
 }

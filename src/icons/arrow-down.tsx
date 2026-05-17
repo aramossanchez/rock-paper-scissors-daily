@@ -1,10 +1,17 @@
-export default function ArrowDownIcon({ size = 20 }: { size?: number }) {
+export default function ArrowDownIcon({
+  size = 20,
+  className = "",
+}: {
+  size?: number;
+  className?: string;
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 640 640"
       width={size}
       height={size}
+      className={className}
     >
       <path
         fill="currentColor"

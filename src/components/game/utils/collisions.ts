@@ -48,7 +48,6 @@ export const collisionDetectionBetweenWinnerAndLoser = (
   winnerArray: Item[],
   loserArray: Item[],
   iconRadius: number,
-  speed: number,
   replace?: boolean,
   eliminate?: boolean,
   winnerSetter: (value: React.SetStateAction<number>) => void = () => {},
