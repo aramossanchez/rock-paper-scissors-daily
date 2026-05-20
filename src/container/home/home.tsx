@@ -21,8 +21,8 @@ export default function HomeContainer() {
   const [rocksNumber, setRocksNumber] = useState(10);
   const [papersNumber, setPapersNumber] = useState(10);
   const [scissorsNumber, setScissorsNumber] = useState(10);
-  const [eliminate, setEliminate] = useState(true);
-  const [replace, setReplace] = useState(false);
+  const [eliminate, setEliminate] = useState(false);
+  const [replace, setReplace] = useState(true);
   const [externalClock, setExternalClock] = useState<number>(0);
   const [rockArrowClass, setRockArrowClass] = useState<ArrowClasses | null>(
     null,
